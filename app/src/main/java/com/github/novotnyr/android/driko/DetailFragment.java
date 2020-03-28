@@ -6,6 +6,7 @@ import android.widget.TextView;
 
 import androidx.annotation.*;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.ViewModelProvider;
 
 public class DetailFragment extends Fragment {
     private TextView temperatureTextView;
@@ -23,5 +24,13 @@ public class DetailFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         temperatureTextView = view.findViewById(R.id.temperatureTextView);
+        ViewModelProvider vmProvider = new ViewModelProvider(requireActivity());
+        CityViewModel viewModel = vmProvider.get(CityViewModel.class);
+        viewModel.getSelectedCity().observe(this, this::setTemperature);
+    }
+
+    private void setTemperature(String city) {
+        int temperature = city.hashCode() % 32;
+        temperatureTextView.setText("" + temperature);
     }
 }
