@@ -12,14 +12,20 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        getSupportFragmentManager()
-                .beginTransaction()
-                .replace(R.id.activity_main, new MasterFragment())
-                .commit();
+        if (isSmallDevice()) {
+            getSupportFragmentManager()
+                    .beginTransaction()
+                    .replace(R.id.activity_main, new MasterFragment())
+                    .commit();
 
-        ViewModelProvider vmProvider = new ViewModelProvider(this);
-        CityViewModel cityViewModel = vmProvider.get(CityViewModel.class);
-        cityViewModel.getSelectedCity().observe(this, this::showDetailFragment);
+            ViewModelProvider vmProvider = new ViewModelProvider(this);
+            CityViewModel cityViewModel = vmProvider.get(CityViewModel.class);
+            cityViewModel.getSelectedCity().observe(this, this::showDetailFragment);
+        }
+    }
+
+    private boolean isSmallDevice() {
+        return findViewById(R.id.activity_main) != null;
     }
 
     private void showDetailFragment(String city) {
